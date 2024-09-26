@@ -107,4 +107,4 @@ const deleteToDo = async(req, res, next) => {
 }
 
 
-module.exports = { addToDo, getToDo, getToDoById, updateToDo, deleteToDo}
+module.exports = { addToDo, getToDo, getToDoById, updateToDo, deleteToDo }

@@ -19,8 +19,7 @@ app.get("/", (req, res) => {
 
 
 app.use("/api/users", userRoutes)
-//check auth
-app.use(checkAuth)
+
 app.use("/api/todos", todoRoutes)
 
 

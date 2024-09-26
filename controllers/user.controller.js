@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const { jwtSecret, jwtExpiration } = require("../config/jwt.config")
 const { validateUserSignUp, validateLoginInput } = require("../validations/user.validation")
 
-const signUp = async (req, res) => {
+const signUp = async (req, res,next) => {
     try {
         //destructure data
         const { username, email, password } = req.body;
