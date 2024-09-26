@@ -36,22 +36,35 @@ const signUp = async (req, res) => {
 }
 
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
     try {
         //destructure data
         let { username, password } = req.body;
 
         //validate user
         let error = validateLoginInput(username, password);
-        if (error) return res.status(400).json({ message: error });
+        if (error){
+            const err = new Error(error);
+            err.status = 400; 
+            return next(err);
+
+        }
 
         //check if user exists
         let user = await User.findOne({ username: req.body.username });
-        if (!user) return res.status(400).json({ message: 'User not found' })
+        if (!user)  {
+            const err = new Error('User not found');
+            err.status = 400; 
+            return next(err);
+          }
 
         //check if its valid password
         const isValidPassword = await bcrypt.compare(password, user.password);
-        if (!isValidPassword) return res.status(400).json({ message: 'Invalid password' });
+        if (!isValidPassword) {
+            const err = new Error('Invalid password');
+            err.status = 400; 
+            return next(err);
+          }
 
         //create jwt token
         const token = jwt.sign(
@@ -64,7 +77,8 @@ const login = async (req, res) => {
         return res.status(200).json({ message: "User login successful", token, user: { id: user._id, username: user.username, email: user.email } })
 
     } catch (error) {
-        res.status(500).json({ message: error.message })
+        // res.status(500).json({ message: error.message })
+        next(error)
     }
 }
 
