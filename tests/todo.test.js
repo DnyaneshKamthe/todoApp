@@ -99,7 +99,7 @@ describe("API testing for ToDo controllers", () => {
             description: "Test Description",
             dueDate: "2024-10-01",
             completed: false
-        }) .set("Authorization", "Bearer fake-jwt-token");
+        }).set("Authorization", "Bearer fake-jwt-token");
 
         expect(res.statusCode).toEqual(201);
         expect(res.body).toEqual({
@@ -118,14 +118,14 @@ describe("API testing for ToDo controllers", () => {
     it("Should fail to add a todo with missing fields", async () => {
         const res = await request(server).post("/api/todos").send({
             title: "Test Todo"
-        });
+        }).set("Authorization", "Bearer fake-jwt-token");
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toEqual({ message: "Invalid data" });
     });
 
     it("Should get all todos", async () => {
-        const res = await request(server).get("/api/todos");
+        const res = await request(server).get("/api/todos").set("Authorization", "Bearer fake-jwt-token");
 
         expect(res.statusCode).toEqual(200);
         expect(res.body.length).toBe(2);
@@ -140,7 +140,7 @@ describe("API testing for ToDo controllers", () => {
 
 
     it("Should get a todo by ID", async () => {
-        const res = await request(server).get("/api/todos/todo1");
+        const res = await request(server).get("/api/todos/todo1").set("Authorization", "Bearer fake-jwt-token");
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual({
@@ -153,7 +153,7 @@ describe("API testing for ToDo controllers", () => {
     });
 
     it("Should return 404 if todo with ID is not found", async () => {
-        const res = await request(server).get("/api/todos/invalidId");
+        const res = await request(server).get("/api/todos/invalidId").set("Authorization", "Bearer fake-jwt-token");
 
         expect(res.statusCode).toEqual(404);
         expect(res.body).toEqual({
@@ -166,7 +166,7 @@ describe("API testing for ToDo controllers", () => {
         const res = await request(server).put("/api/todos/todoId123").send({
             title: "Updated Todo",
             completed: true
-        });
+        }).set("Authorization", "Bearer fake-jwt-token");
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual({
@@ -182,14 +182,14 @@ describe("API testing for ToDo controllers", () => {
     });
 
     it("Should not update if no fields are provided", async () => {
-        const res = await request(server).put("/api/todos/todoId123").send({});
+        const res = await request(server).put("/api/todos/todoId123").send({}).set("Authorization", "Bearer fake-jwt-token");
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toEqual({ message: "No fields to update" });
     });
 
     it("Should delete a todo", async () => {
-        const res = await request(server).delete("/api/todos/todoId123");
+        const res = await request(server).delete("/api/todos/todoId123").set("Authorization", "Bearer fake-jwt-token");
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual({ message: "Todo with id todoId123 deleted successfully" });
